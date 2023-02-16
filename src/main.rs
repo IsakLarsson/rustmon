@@ -113,6 +113,7 @@ fn choose_pokemon() -> Pokemon {
     io::stdin()
         .read_line(&mut input)
         .expect("Failed to read line!");
+
     let choice = match make_choice(pokemon_list, input) {
         Some(pokemon) => pokemon,
         None => Pokemon::new("test".to_string(), 5, Type::Earth, 50),
