@@ -9,3 +9,4 @@ edition = "2021"
 ansi_term = "0.12"
 clap = { version = "4.1.6", features = ["derive"] }
 rand = "0.8"
+tuirealm = "^1.8.0"
