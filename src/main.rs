@@ -101,35 +101,29 @@ fn print_health(pokemon: &Pokemon) {
 
 fn choose_pokemon() -> Pokemon {
     let pikachu = Pokemon::new("Pikachu".to_string(), 30, Type::Electro, 100);
-    let bulbasaur = Pokemon::new("Bulbasaur".to_string(), 30, Type::Earth, 100);
+    let bulbasaur = Pokemon::new("Bulbasaur".to_string(), 10, Type::Earth, 200);
     let squirtle = Pokemon::new("Squirtle".to_string(), 20, Type::Water, 150);
-
     let pokemon_list = vec![pikachu, bulbasaur, squirtle];
+
     println!("\nChoose your starter, these are your options:\n");
     for pokemon in &pokemon_list {
         println!("{}", pokemon.name)
     }
+
     let mut input = String::new();
     io::stdin()
         .read_line(&mut input)
         .expect("Failed to read line!");
-
-    let choice = match make_choice(pokemon_list, input) {
+    match make_choice(pokemon_list, input) {
+        None => Pokemon::new("test".to_string(), 10, Type::Earth, 100),
         Some(pokemon) => pokemon,
-        None => Pokemon::new("test".to_string(), 5, Type::Earth, 50),
-    };
-    return choice;
+    }
 }
 
 fn make_choice(pokemon_list: Vec<Pokemon>, choice: String) -> Option<Pokemon> {
-    for pokemon in pokemon_list {
-        if pokemon.name == choice.trim() {
-            return Some(pokemon);
-        } else {
-            continue;
-        }
-    }
-    None
+    pokemon_list
+        .into_iter()
+        .find(|pokemon| pokemon.name == choice.trim())
 }
 
 fn check_win(pokemon_1: &Pokemon, pokemon_2: &Pokemon) -> bool {
