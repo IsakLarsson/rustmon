@@ -88,6 +88,7 @@ fn greet() {
     println!("*********************************************************");
     println!("************ Welcome to super epic battle ***************");
     println!("*********************************************************");
+    println!("For every move you have two options: attack or run");
 }
 
 fn calculate_damage(attacker: &Pokemon) -> u32 {
@@ -114,8 +115,9 @@ fn choose_pokemon() -> Pokemon {
     io::stdin()
         .read_line(&mut input)
         .expect("Failed to read line!");
+
     match make_choice(pokemon_list, input) {
-        None => Pokemon::new("test".to_string(), 10, Type::Earth, 100),
+        None => choose_pokemon(), //Is this even allowed???
         Some(pokemon) => pokemon,
     }
 }
