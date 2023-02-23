@@ -71,12 +71,7 @@ fn choose_pokemon() -> Pokemon {
     let pokemon_list = vec![pikachu, bulbasaur, squirtle];
 
     println!("\nChoose your starter, these are your options:\n");
-    for pokemon in &pokemon_list {
-        println!(
-            "{}, Health:{}, Power:{}",
-            pokemon.name, pokemon.health, pokemon.power
-        )
-    }
+    list_pokemon(&pokemon_list);
 
     let mut input = String::new();
     io::stdin()
@@ -89,6 +84,14 @@ fn choose_pokemon() -> Pokemon {
             choose_pokemon()
         } //Is this even allowed? Can't possibly be a good practice
         Some(pokemon) => pokemon,
+    }
+}
+fn list_pokemon(pokemon_list: &Vec<Pokemon>) {
+    for pokemon in pokemon_list {
+        println!(
+            "{}, Health:{}, Power:{}",
+            pokemon.name, pokemon.health, pokemon.power
+        )
     }
 }
 
