@@ -1,8 +1,11 @@
-use ansi_term::Colour;
+use crate::pokemon::Pokemon;
+use crate::pokemon::Type;
 use rand::Rng;
 use std::io;
 use std::thread;
 use std::time::Duration;
+
+mod pokemon;
 
 enum Action {
     Attack,
@@ -16,49 +19,6 @@ impl Action {
             "attack" => Action::Attack,
             "run" => Action::Run,
             _ => Action::Nothing,
-        }
-    }
-}
-enum Type {
-    Fire,
-    Earth,
-    Water,
-    Poison,
-    Air,
-    Grass,
-    Electro,
-}
-struct Pokemon {
-    name: String,
-    power: i32,
-    poke_type: Type,
-    health: i32,
-}
-impl Pokemon {
-    fn new(name: String, power: i32, poke_type: Type, health: i32) -> Self {
-        Self {
-            name,
-            power,
-            poke_type,
-            health,
-        }
-    }
-    fn attack(&mut self, defender: &mut Pokemon) {
-        let damage = calculate_damage(&self);
-        match self.poke_type {
-            Type::Electro => defender.health = defender.health - damage,
-            _ => defender.health = defender.health - damage,
-        };
-        println!(
-            "{} attacked {} and dealt {} damage!",
-            Colour::Red.bold().paint(&self.name),
-            Colour::Blue.bold().paint(&defender.name),
-            damage,
-        );
-        if damage > self.power / 2 {
-            println!("It's super effective")
-        } else {
-            println!("It's mildly effective")
         }
     }
 }
@@ -98,11 +58,6 @@ fn greet() {
     println!("************ Welcome to super epic battle ***************");
     println!("*********************************************************");
     println!("For every move you have two options: attack or run");
-}
-
-fn calculate_damage(attacker: &Pokemon) -> i32 {
-    let mut rng = rand::thread_rng();
-    rng.gen_range(1..=attacker.power) as i32
 }
 
 fn print_health(pokemon: &Pokemon) {
