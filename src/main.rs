@@ -1,11 +1,10 @@
+mod pokemon;
 use crate::pokemon::Pokemon;
 use crate::pokemon::Type;
 use rand::Rng;
 use std::io;
 use std::thread;
 use std::time::Duration;
-
-mod pokemon;
 
 enum Action {
     Attack,
@@ -23,22 +22,41 @@ impl Action {
     }
 }
 
+struct Player {
+    name: String,
+    level: u8,
+    inventory: String, //haven't learned hashmaps yets
+    pokemon_list: Vec<Pokemon>,
+}
+impl Player {
+    fn throw_pokemon(&self, index: usize) -> Pokemon {
+        self.pokemon_list[index]
+    }
+}
+
 fn main() {
-    let mut charizard = Pokemon::new("Charizard".to_string(), 10, Type::Fire, 200);
     greet();
-    let mut player = choose_pokemon();
+    let mut enemy = Pokemon::new("Charizard".to_string(), 10, Type::Fire, 200);
+    let starter = choose_pokemon();
+    let current_poke = Player {
+        name: "Player1".to_string(),
+        level: 1,
+        inventory: "empty".to_string(),
+        pokemon_list: vec![starter],
+    };
+    let mut current_poke = current_poke.throw_pokemon(0);
     loop {
-        if check_win(&player, &charizard) {
+        if check_win(&current_poke, &enemy) {
             return;
         }
-        charizard.attack(&mut player);
+        enemy.attack(&mut current_poke);
         let mut input = String::new();
         io::stdin()
             .read_line(&mut input)
             .expect("Failed to read line!");
 
         match Action::from_input(&input) {
-            Action::Attack => player.attack(&mut charizard),
+            Action::Attack => current_poke.attack(&mut enemy),
             Action::Run => {
                 if run_away() {
                     return;
@@ -47,8 +65,8 @@ fn main() {
             Action::Nothing => println!("You do nothing.."),
         }
         thread::sleep(Duration::from_millis(1000));
-        print_health(&player);
-        print_health(&charizard);
+        print_health(&current_poke);
+        print_health(&enemy);
         println!("\n");
     }
 }
@@ -57,7 +75,7 @@ fn greet() {
     println!("*********************************************************");
     println!("************ Welcome to super epic battle ***************");
     println!("*********************************************************");
-    println!("For every move you have two options: attack or run");
+    println!("For every move you have two options: attack or run. A faulty input will result in doing nothing");
 }
 
 fn print_health(pokemon: &Pokemon) {
