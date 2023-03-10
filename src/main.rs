@@ -37,12 +37,11 @@ impl Player {
 fn main() {
     greet();
     let mut enemy = Pokemon::new("Charizard".to_string(), 10, Type::Fire, 200);
-    let starter = choose_pokemon();
     let mut player = Player {
         name: "Player1".to_string(),
         level: 1,
         inventory: "empty".to_string(),
-        pokemon_bag: vec![starter],
+        pokemon_bag: vec![choose_pokemon()],
     };
     let mut current_poke = player.throw_pokemon(0);
     loop {
@@ -105,11 +104,13 @@ fn choose_pokemon() -> Pokemon {
     }
 }
 fn list_pokemon(pokemon_list: &Vec<Pokemon>) {
+    let mut index = 1;
     for pokemon in pokemon_list {
         println!(
-            "{}, Health:{}, Power:{}",
+            "[{index}]{}, Health:{}, Power:{}",
             pokemon.name, pokemon.health, pokemon.power
-        )
+        );
+        index += 1;
     }
 }
 
