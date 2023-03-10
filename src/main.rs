@@ -26,11 +26,11 @@ struct Player {
     name: String,
     level: u8,
     inventory: String, //haven't learned hashmaps yets
-    pokemon_list: Vec<Pokemon>,
+    pokemon_bag: Vec<Pokemon>,
 }
 impl Player {
     fn throw_pokemon(&mut self, index: usize) -> &mut Pokemon {
-        &mut self.pokemon_list[index]
+        &mut self.pokemon_bag[index]
     }
 }
 
@@ -42,7 +42,7 @@ fn main() {
         name: "Player1".to_string(),
         level: 1,
         inventory: "empty".to_string(),
-        pokemon_list: vec![starter],
+        pokemon_bag: vec![starter],
     };
     let mut current_poke = player.throw_pokemon(0);
     loop {
@@ -113,6 +113,11 @@ fn list_pokemon(pokemon_list: &Vec<Pokemon>) {
     }
 }
 
+fn make_choice(pokemon_list: Vec<Pokemon>, choice: &str) -> Option<Pokemon> {
+    pokemon_list
+        .into_iter()
+        .find(|pokemon| pokemon.name == choice.trim())
+}
 fn run_away() -> bool {
     let mut rng = rand::thread_rng();
     if rng.gen_range(0..=10) == 10 {
@@ -122,11 +127,6 @@ fn run_away() -> bool {
         println!("It's not very effective..");
         false
     }
-}
-fn make_choice(pokemon_list: Vec<Pokemon>, choice: &str) -> Option<Pokemon> {
-    pokemon_list
-        .into_iter()
-        .find(|pokemon| pokemon.name == choice.trim())
 }
 
 fn check_win(pokemon_1: &Pokemon, pokemon_2: &Pokemon) -> bool {
