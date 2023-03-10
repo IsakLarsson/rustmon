@@ -1,6 +1,7 @@
 use ansi_term::Colour;
 use rand::Rng;
 
+#[derive(Debug)]
 pub enum Type {
     Fire,
     Earth,
@@ -10,6 +11,7 @@ pub enum Type {
     Grass,
     Electro,
 }
+#[derive(Debug)]
 pub struct Pokemon {
     pub name: String,
     pub power: i32,

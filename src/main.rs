@@ -21,7 +21,7 @@ impl Action {
         }
     }
 }
-
+#[derive(Debug)]
 struct Player {
     name: String,
     level: u8,
@@ -29,8 +29,8 @@ struct Player {
     pokemon_list: Vec<Pokemon>,
 }
 impl Player {
-    fn throw_pokemon(&self, index: usize) -> Pokemon {
-        self.pokemon_list[index]
+    fn throw_pokemon(&mut self, index: usize) -> &mut Pokemon {
+        &mut self.pokemon_list[index]
     }
 }
 
@@ -38,13 +38,13 @@ fn main() {
     greet();
     let mut enemy = Pokemon::new("Charizard".to_string(), 10, Type::Fire, 200);
     let starter = choose_pokemon();
-    let current_poke = Player {
+    let mut player = Player {
         name: "Player1".to_string(),
         level: 1,
         inventory: "empty".to_string(),
         pokemon_list: vec![starter],
     };
-    let mut current_poke = current_poke.throw_pokemon(0);
+    let mut current_poke = player.throw_pokemon(0);
     loop {
         if check_win(&current_poke, &enemy) {
             return;
