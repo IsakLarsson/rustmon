@@ -2,6 +2,7 @@ mod pokemon;
 use crate::pokemon::Pokemon;
 use crate::pokemon::Type;
 use rand::Rng;
+use std::collections::HashMap;
 use std::io;
 use std::thread;
 use std::time::Duration;
@@ -21,11 +22,19 @@ impl Action {
         }
     }
 }
+
+#[derive(Debug)]
+struct Item {
+    name: String,
+    description: String,
+    value: i32,
+}
+
 #[derive(Debug)]
 struct Player {
     name: String,
     level: u8,
-    inventory: String, //haven't learned hashmaps yets
+    inventory: HashMap<String, Item>,
     pokemon_bag: Vec<Pokemon>,
 }
 impl Player {
@@ -40,7 +49,7 @@ fn main() {
     let mut player = Player {
         name: "Player1".to_string(),
         level: 1,
-        inventory: "empty".to_string(),
+        inventory: HashMap::new(),
         pokemon_bag: vec![choose_pokemon()],
     };
     let mut current_poke = player.throw_pokemon(0);
