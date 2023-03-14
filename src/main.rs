@@ -99,17 +99,26 @@ fn choose_pokemon() -> Pokemon {
     println!("\nChoose your starter, these are your options:\n");
     list_pokemon(&pokemon_list);
 
-    let mut input = String::new();
-    io::stdin()
-        .read_line(&mut input)
-        .expect("Failed to read line!");
+    loop {
+        let mut input = String::new();
+        println!("Enter a number to choose:");
+        io::stdin().read_line(&mut input).unwrap();
 
-    match make_choice(pokemon_list, &input) {
-        None => {
-            println!("Invalid option");
-            choose_pokemon()
-        } //Is this even allowed? Can't possibly be a good practice
-        Some(pokemon) => pokemon,
+        match input.trim().parse::<usize>() {
+            Ok(index) => match pokemon_list.get(index - 1) {
+                Some(pokemon) => {
+                    return pokemon.clone();
+                } // return the selected Pokemon as an owned item
+                None => {
+                    println!("Not a valid choice\n");
+                    continue;
+                }
+            },
+            Err(_) => {
+                println!("Invalid input. Please enter a number.");
+                continue;
+            }
+        }
     }
 }
 fn list_pokemon(pokemon_list: &Vec<Pokemon>) {
@@ -123,11 +132,6 @@ fn list_pokemon(pokemon_list: &Vec<Pokemon>) {
     }
 }
 
-fn make_choice(pokemon_list: Vec<Pokemon>, choice: &str) -> Option<Pokemon> {
-    pokemon_list
-        .into_iter()
-        .find(|pokemon| pokemon.name == choice.trim())
-}
 fn run_away() -> bool {
     let mut rng = rand::thread_rng();
     if rng.gen_range(0..=10) == 10 {

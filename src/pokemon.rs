@@ -1,7 +1,7 @@
 use ansi_term::Colour;
 use rand::Rng;
 
-#[derive(Debug)]
+#[derive(Clone, Debug)]
 pub enum Type {
     Fire,
     Earth,
@@ -11,14 +11,13 @@ pub enum Type {
     Grass,
     Electro,
 }
-#[derive(Debug)]
+#[derive(Clone, Debug)]
 pub struct Pokemon {
     pub name: String,
     pub power: i32,
     pub poke_type: Type,
     pub health: i32,
 }
-
 impl Pokemon {
     pub fn new(name: String, power: i32, poke_type: Type, health: i32) -> Self {
         Self {
