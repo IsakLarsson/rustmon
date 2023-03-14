@@ -52,31 +52,8 @@ fn main() {
         inventory: HashMap::new(),
         pokemon_bag: vec![choose_pokemon()],
     };
-    let mut current_poke = player.throw_pokemon(0);
-    loop {
-        if check_win(&current_poke, &enemy) {
-            return;
-        }
-        enemy.attack(&mut current_poke);
-        let mut input = String::new();
-        io::stdin()
-            .read_line(&mut input)
-            .expect("Failed to read line!");
-
-        match Action::from_input(&input) {
-            Action::Attack => current_poke.attack(&mut enemy),
-            Action::Run => {
-                if run_away() {
-                    return;
-                }
-            }
-            Action::Nothing => println!("You do nothing.."),
-        }
-        thread::sleep(Duration::from_millis(1000));
-        print_health(&current_poke);
-        print_health(&enemy);
-        println!("\n");
-    }
+    let current_poke = player.throw_pokemon(0);
+    battle(current_poke, &mut enemy)
 }
 
 fn greet() {
@@ -108,7 +85,7 @@ fn choose_pokemon() -> Pokemon {
             Ok(index) => match pokemon_list.get(index - 1) {
                 Some(pokemon) => {
                     return pokemon.clone();
-                } // return the selected Pokemon as an owned item
+                }
                 None => {
                     println!("Not a valid choice\n");
                     continue;
@@ -129,6 +106,33 @@ fn list_pokemon(pokemon_list: &Vec<Pokemon>) {
             pokemon.name, pokemon.health, pokemon.power
         );
         index += 1;
+    }
+}
+
+fn battle(player_pokemon: &mut Pokemon, enemy_pokemon: &mut Pokemon) {
+    loop {
+        if check_win(&player_pokemon, &enemy_pokemon) {
+            return;
+        }
+        enemy_pokemon.attack(player_pokemon);
+        let mut input = String::new();
+        io::stdin()
+            .read_line(&mut input)
+            .expect("Failed to read line!");
+
+        match Action::from_input(&input) {
+            Action::Attack => player_pokemon.attack(enemy_pokemon),
+            Action::Run => {
+                if run_away() {
+                    return;
+                }
+            }
+            Action::Nothing => println!("You do nothing.."),
+        }
+        thread::sleep(Duration::from_millis(1000));
+        print_health(&player_pokemon);
+        print_health(&enemy_pokemon);
+        println!("\n");
     }
 }
 
