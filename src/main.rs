@@ -45,12 +45,13 @@ impl Player {
 
 fn main() {
     greet();
+    let starter_list = init_starter_list();
     let mut enemy = Pokemon::new("Charizard".to_string(), 10, Type::Fire, 200);
     let mut player = Player {
         name: "Player1".to_string(),
         level: 1,
         inventory: HashMap::new(),
-        pokemon_bag: vec![choose_pokemon()],
+        pokemon_bag: vec![choose_pokemon(&starter_list)],
     };
     let current_poke = player.throw_pokemon(0);
     battle(current_poke, &mut enemy)
@@ -67,37 +68,48 @@ fn print_health(pokemon: &Pokemon) {
     println!("{} health is {}", pokemon.name, pokemon.health);
 }
 
-fn choose_pokemon() -> Pokemon {
+fn init_starter_list() -> Vec<Pokemon> {
     let pikachu = Pokemon::new("Pikachu".to_string(), 30, Type::Electro, 100);
     let bulbasaur = Pokemon::new("Bulbasaur".to_string(), 10, Type::Earth, 200);
     let squirtle = Pokemon::new("Squirtle".to_string(), 20, Type::Water, 150);
     let pokemon_list = vec![pikachu, bulbasaur, squirtle];
+    return pokemon_list;
+}
 
+fn choose_pokemon(pokemon_list: &Vec<Pokemon>) -> Pokemon {
     println!("\nChoose your starter, these are your options:\n");
-    list_pokemon(&pokemon_list);
+    list_pokemon(pokemon_list);
 
+    loop {
+        let index = number_prompt();
+        match pokemon_list.get(index - 1) {
+            Some(pokemon) => {
+                return pokemon.clone();
+            }
+            None => {
+                println!("Not a valid choice\n");
+                continue;
+            }
+        }
+    }
+}
+
+fn number_prompt() -> usize {
     loop {
         let mut input = String::new();
         println!("Enter a number to choose:");
         io::stdin().read_line(&mut input).unwrap();
 
         match input.trim().parse::<usize>() {
-            Ok(index) => match pokemon_list.get(index - 1) {
-                Some(pokemon) => {
-                    return pokemon.clone();
-                }
-                None => {
-                    println!("Not a valid choice\n");
-                    continue;
-                }
-            },
+            Ok(index) => return index,
             Err(_) => {
                 println!("Invalid input. Please enter a number.");
                 continue;
             }
-        }
+        };
     }
 }
+
 fn list_pokemon(pokemon_list: &Vec<Pokemon>) {
     let mut index = 1;
     for pokemon in pokemon_list {
