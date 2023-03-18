@@ -6,9 +6,6 @@ pub enum Type {
     Fire,
     Earth,
     Water,
-    Poison,
-    Air,
-    Grass,
     Electro,
 }
 #[derive(Clone, Debug)]

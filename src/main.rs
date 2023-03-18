@@ -38,6 +38,15 @@ struct Player {
     pokemon_bag: Vec<Pokemon>,
 }
 impl Player {
+    fn new() -> Player {
+        let starter_list = init_starter_list();
+        Player {
+            name: "Player1".to_string(),
+            level: 1,
+            inventory: HashMap::new(),
+            pokemon_bag: vec![choose_pokemon(&starter_list)],
+        }
+    }
     fn throw_pokemon(&mut self, index: usize) -> &mut Pokemon {
         &mut self.pokemon_bag[index]
     }
@@ -45,14 +54,8 @@ impl Player {
 
 fn main() {
     greet();
-    let starter_list = init_starter_list();
     let mut enemy = Pokemon::new("Charizard".to_string(), 10, Type::Fire, 200);
-    let mut player = Player {
-        name: "Player1".to_string(),
-        level: 1,
-        inventory: HashMap::new(),
-        pokemon_bag: vec![choose_pokemon(&starter_list)],
-    };
+    let mut player = Player::new();
     let current_poke = player.throw_pokemon(0);
     battle(current_poke, &mut enemy)
 }
@@ -69,10 +72,10 @@ fn print_health(pokemon: &Pokemon) {
 }
 
 fn init_starter_list() -> Vec<Pokemon> {
-    let pikachu = Pokemon::new("Pikachu".to_string(), 30, Type::Electro, 100);
+    let charmander = Pokemon::new("Charmander".to_string(), 30, Type::Fire, 100);
     let bulbasaur = Pokemon::new("Bulbasaur".to_string(), 10, Type::Earth, 200);
     let squirtle = Pokemon::new("Squirtle".to_string(), 20, Type::Water, 150);
-    let pokemon_list = vec![pikachu, bulbasaur, squirtle];
+    let pokemon_list = vec![charmander, bulbasaur, squirtle];
     return pokemon_list;
 }
 
