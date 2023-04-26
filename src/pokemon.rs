@@ -8,6 +8,7 @@ pub enum Type {
     Water,
     Electro,
 }
+
 #[derive(Clone, Debug)]
 pub struct Pokemon {
     pub name: String,
@@ -15,6 +16,7 @@ pub struct Pokemon {
     pub poke_type: Type,
     pub health: i32,
 }
+
 impl Pokemon {
     pub fn new(name: String, power: i32, poke_type: Type, health: i32) -> Self {
         Self {
@@ -41,6 +43,9 @@ impl Pokemon {
         } else {
             println!("It's mildly effective")
         }
+    }
+    pub fn print_health(&self) {
+        println!("{} health is {}", self.name, self.health);
     }
 }
 fn calculate_damage(attacker: &Pokemon) -> i32 {
