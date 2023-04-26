@@ -8,21 +8,32 @@ use std::time::Duration;
 
 #[derive(Debug)]
 pub struct Player {
-    name: String,
     level: u8,
+    name: String,
     pokemon_bag: Vec<Pokemon>,
 }
 impl Player {
-    pub fn new() -> Player {
+    pub fn new(name: String) -> Player {
         let starter_list = init_starter_list();
+        print!("{name}! Choose your pokemon!");
         Player {
-            name: "Player1".to_string(),
+            name,
             level: 1,
             pokemon_bag: vec![choose_pokemon(&starter_list)],
         }
     }
     pub fn throw_pokemon(&mut self, index: usize) -> &mut Pokemon {
         &mut self.pokemon_bag[index]
+    }
+    fn run_away() -> bool {
+        let mut rng = rand::thread_rng();
+        if rng.gen_range(0..=10) == 10 {
+            println!("You successfully ran away!");
+            true
+        } else {
+            println!("It's not very effective..");
+            false
+        }
     }
 }
 enum Action {
@@ -56,7 +67,7 @@ fn init_starter_list() -> Vec<Pokemon> {
 }
 
 fn choose_pokemon(pokemon_list: &Vec<Pokemon>) -> Pokemon {
-    println!("\nChoose your starter, these are your options:\n");
+    println!(" Choose your starter, these are your options:\n");
     list_pokemon(pokemon_list);
 
     loop {
@@ -100,9 +111,11 @@ fn list_pokemon(pokemon_list: &Vec<Pokemon>) {
     }
 }
 
-pub fn battle(player_pokemon: &mut Pokemon, enemy_pokemon: &mut Pokemon) {
+pub fn battle(player: &mut Player, enemy: &mut Player) {
+    let enemy_pokemon = enemy.throw_pokemon(0);
+    let player_pokemon = player.throw_pokemon(0);
     loop {
-        if check_win(&player_pokemon, &enemy_pokemon) {
+        if check_win(player_pokemon, enemy_pokemon) {
             return;
         }
         enemy_pokemon.attack(player_pokemon);
@@ -114,7 +127,7 @@ pub fn battle(player_pokemon: &mut Pokemon, enemy_pokemon: &mut Pokemon) {
         match Action::from_input(&input) {
             Action::Attack => player_pokemon.attack(enemy_pokemon),
             Action::Run => {
-                if run_away() {
+                if Player::run_away() {
                     return;
                 }
             }
@@ -124,17 +137,6 @@ pub fn battle(player_pokemon: &mut Pokemon, enemy_pokemon: &mut Pokemon) {
         player_pokemon.print_health();
         enemy_pokemon.print_health();
         println!("\n");
-    }
-}
-
-fn run_away() -> bool {
-    let mut rng = rand::thread_rng();
-    if rng.gen_range(0..=10) == 10 {
-        println!("You successfully ran away!");
-        true
-    } else {
-        println!("It's not very effective..");
-        false
     }
 }
 
