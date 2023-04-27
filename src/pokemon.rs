@@ -27,10 +27,10 @@ impl Pokemon {
         }
     }
     pub fn attack(&self, defender: &mut Pokemon) {
-        let damage = calculate_damage(&self);
+        let damage = calculate_damage(self);
         match self.poke_type {
-            Type::Electro => defender.health = defender.health - damage,
-            _ => defender.health = defender.health - damage,
+            Type::Electro => defender.health -= damage,
+            _ => defender.health -= damage,
         };
         println!(
             "{} attacked {} and dealt {} damage!",
@@ -50,5 +50,5 @@ impl Pokemon {
 }
 fn calculate_damage(attacker: &Pokemon) -> i32 {
     let mut rng = rand::thread_rng();
-    rng.gen_range(1..=attacker.power) as i32
+    rng.gen_range(1..=attacker.power)
 }

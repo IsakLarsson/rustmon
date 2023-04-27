@@ -63,7 +63,7 @@ fn init_starter_list() -> Vec<Pokemon> {
     let bulbasaur = Pokemon::new("Bulbasaur".to_string(), 10, Type::Earth, 200);
     let squirtle = Pokemon::new("Squirtle".to_string(), 20, Type::Water, 150);
     let pokemon_list = vec![charmander, bulbasaur, squirtle];
-    return pokemon_list;
+    pokemon_list
 }
 
 fn choose_pokemon(pokemon_list: &Vec<Pokemon>) -> Pokemon {
