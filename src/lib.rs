@@ -19,7 +19,7 @@ impl Player {
         Player {
             name,
             level: 1,
-            pokemon_bag: vec![choose_pokemon(&starter_list)],
+            pokemon_bag: vec![Self::choose_pokemon(&starter_list)],
         }
     }
     pub fn throw_pokemon(&mut self, index: usize) -> &mut Pokemon {
@@ -33,6 +33,23 @@ impl Player {
         } else {
             println!("It's not very effective..");
             false
+        }
+    }
+    fn choose_pokemon(pokemon_list: &Vec<Pokemon>) -> Pokemon {
+        println!(" Choose your starter, these are your options:\n");
+        list_pokemon(pokemon_list);
+
+        loop {
+            let index = number_prompt();
+            match pokemon_list.get(index - 1) {
+                Some(pokemon) => {
+                    return pokemon.clone();
+                }
+                None => {
+                    println!("Not a valid choice\n");
+                    continue;
+                }
+            }
         }
     }
 }
@@ -64,24 +81,6 @@ fn init_starter_list() -> Vec<Pokemon> {
     let squirtle = Pokemon::new("Squirtle".to_string(), 20, Type::Water, 150);
     let pokemon_list = vec![charmander, bulbasaur, squirtle];
     pokemon_list
-}
-
-fn choose_pokemon(pokemon_list: &Vec<Pokemon>) -> Pokemon {
-    println!(" Choose your starter, these are your options:\n");
-    list_pokemon(pokemon_list);
-
-    loop {
-        let index = number_prompt();
-        match pokemon_list.get(index - 1) {
-            Some(pokemon) => {
-                return pokemon.clone();
-            }
-            None => {
-                println!("Not a valid choice\n");
-                continue;
-            }
-        }
-    }
 }
 
 fn number_prompt() -> usize {
