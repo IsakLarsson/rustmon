@@ -1,8 +1,5 @@
-mod pokemon;
-use rustmon::Player;
+use rustmon::init_game;
 
 fn main() {
-    let mut player = Player::new(String::from("Ash"));
-    let mut enemy = Player::new(String::from("Kethup"));
-    rustmon::battle(&mut player, &mut enemy)
+    init_game()
 }

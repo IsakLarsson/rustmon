@@ -6,7 +6,6 @@ pub enum Type {
     Fire,
     Earth,
     Water,
-    Electro,
 }
 
 #[derive(Clone, Debug)]
@@ -28,10 +27,7 @@ impl Pokemon {
     }
     pub fn attack(&self, defender: &mut Pokemon) {
         let damage = calculate_damage(self);
-        match self.poke_type {
-            Type::Electro => defender.health -= damage,
-            _ => defender.health -= damage,
-        };
+        defender.health -= damage;
         println!(
             "{} attacked {} and dealt {} damage!",
             Colour::Red.bold().paint(&self.name),
@@ -51,4 +47,11 @@ impl Pokemon {
 fn calculate_damage(attacker: &Pokemon) -> i32 {
     let mut rng = rand::thread_rng();
     rng.gen_range(1..=attacker.power)
+}
+
+pub fn get_starters() -> Vec<Pokemon> {
+    let charmander = Pokemon::new("Charmander".to_string(), 30, Type::Fire, 100);
+    let bulbasaur = Pokemon::new("Bulbasaur".to_string(), 10, Type::Earth, 200);
+    let squirtle = Pokemon::new("Squirtle".to_string(), 20, Type::Water, 150);
+    return vec![charmander, bulbasaur, squirtle];
 }

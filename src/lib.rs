@@ -1,58 +1,11 @@
+mod player;
 mod pokemon;
 use crate::pokemon::Pokemon;
-use crate::pokemon::Type;
-use rand::Rng;
+use player::Player;
 use std::io;
 use std::thread;
 use std::time::Duration;
 
-#[derive(Debug)]
-pub struct Player {
-    level: u8,
-    name: String,
-    pokemon_bag: Vec<Pokemon>,
-}
-impl Player {
-    pub fn new(name: String) -> Player {
-        let starter_list = init_starter_list();
-        print!("{name}! Choose your pokemon!");
-        Player {
-            name,
-            level: 1,
-            pokemon_bag: vec![Self::choose_pokemon(&starter_list)],
-        }
-    }
-    pub fn throw_pokemon(&mut self, index: usize) -> &mut Pokemon {
-        &mut self.pokemon_bag[index]
-    }
-    fn run_away() -> bool {
-        let mut rng = rand::thread_rng();
-        if rng.gen_range(0..=10) == 10 {
-            println!("You successfully ran away!");
-            true
-        } else {
-            println!("It's not very effective..");
-            false
-        }
-    }
-    fn choose_pokemon(pokemon_list: &Vec<Pokemon>) -> Pokemon {
-        println!(" Choose your starter, these are your options:\n");
-        list_pokemon(pokemon_list);
-
-        loop {
-            let index = number_prompt();
-            match pokemon_list.get(index - 1) {
-                Some(pokemon) => {
-                    return pokemon.clone();
-                }
-                None => {
-                    println!("Not a valid choice\n");
-                    continue;
-                }
-            }
-        }
-    }
-}
 enum Action {
     Attack,
     Run,
@@ -68,19 +21,18 @@ impl Action {
         }
     }
 }
+pub fn init_game() {
+    greet();
+    let mut player = Player::new(String::from("Ash"));
+    let mut enemy = Player::new(String::from("Kethup"));
+    battle(&mut player, &mut enemy)
+}
+
 pub fn greet() {
     println!("*********************************************************");
     println!("************ Welcome to super epic battle ***************");
     println!("*********************************************************");
     println!("For every move you have two options: attack or run. A faulty input will result in doing nothing");
-}
-
-fn init_starter_list() -> Vec<Pokemon> {
-    let charmander = Pokemon::new("Charmander".to_string(), 30, Type::Fire, 100);
-    let bulbasaur = Pokemon::new("Bulbasaur".to_string(), 10, Type::Earth, 200);
-    let squirtle = Pokemon::new("Squirtle".to_string(), 20, Type::Water, 150);
-    let pokemon_list = vec![charmander, bulbasaur, squirtle];
-    pokemon_list
 }
 
 fn number_prompt() -> usize {
@@ -110,7 +62,7 @@ fn list_pokemon(pokemon_list: &Vec<Pokemon>) {
     }
 }
 
-pub fn battle(player: &mut Player, enemy: &mut Player) {
+fn battle(player: &mut Player, enemy: &mut Player) {
     let enemy_pokemon = enemy.throw_pokemon(0);
     let player_pokemon = player.throw_pokemon(0);
     loop {
